@@ -12,7 +12,7 @@ type AppState = "idle" | "listening" | "processing" | "speaking";
 
 interface ChatMessage {
   id: string;
-  sender: "user" | "Kiitu";
+  sender: "user" | "kittu";
   text: string;
 }
 
@@ -75,7 +75,6 @@ export default function App() {
 
     setMessages((prev) => [...prev, { id: Date.now().toString(), sender: "user", text: finalTranscript }]);
     
-    // If live session is active, send text through it
     if (isSessionActive && liveSessionRef.current) {
       liveSessionRef.current.sendText(finalTranscript);
       return;
@@ -83,9 +82,7 @@ export default function App() {
 
     setAppState("processing");
 
-    // 1. Check for browser commands
     const commandResult = processCommand(finalTranscript);
-
     let responseText = "";
 
     if (commandResult.isBrowserAction) {
@@ -108,7 +105,6 @@ export default function App() {
         }
       }, 1500);
     } else {
-      // 2. General Chit-Chat via Gemini
       responseText = await getKittuResponse(finalTranscript, messagesRef.current);
       setMessages((prev) => [...prev, { id: Date.now().toString() + "-z", sender: "kittu", text: responseText }]);
       
@@ -154,7 +150,8 @@ export default function App() {
         };
         
         session.onMessage = (sender, text) => {
-          setMessages((prev) => [...prev, { id: Date.now().toString() + "-" + sender, sender, text }]);
+          const mappedSender = sender === "user" ? "user" : "kittu";
+          setMessages((prev) => [...prev, { id: Date.now().toString() + "-" + sender, sender: mappedSender, text }]);
         };
         
         session.onCommand = (url) => {
@@ -190,13 +187,11 @@ export default function App() {
         />
       )}
 
-      {/* Cinematic Background Gradients */}
       <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
         <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-violet-900/20 blur-[120px] rounded-full" />
         <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-pink-900/20 blur-[120px] rounded-full" />
       </div>
 
-      {/* Header */}
       <header className="absolute top-0 left-0 w-full flex justify-between items-center z-20 shrink-0 px-6 py-4 md:px-12 md:py-6">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-violet-500 to-pink-500 flex items-center justify-center font-bold text-sm">
@@ -233,10 +228,7 @@ export default function App() {
         </div>
       </header>
 
-      {/* Main Content - Visualizer & Chat */}
       <main className="absolute inset-0 flex flex-row items-center justify-between w-full h-full z-10 overflow-hidden pt-20 pb-24 px-4 md:px-12 pointer-events-none">
-        
-        {/* Left Column: Zoya Status */}
         <div className="flex w-[30%] lg:w-[25%] h-full flex-col justify-center gap-4 z-10">
           <div className="h-6">
             <AnimatePresence>
@@ -255,12 +247,10 @@ export default function App() {
           </div>
         </div>
 
-        {/* Center Visualizer (Fixed Full Screen Background) */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
           <Visualizer state={appState} />
         </div>
 
-        {/* Right Column: User Status */}
         <div className="flex w-[30%] lg:w-[25%] h-full flex-col justify-center gap-4 z-10">
           <div className="h-6 flex justify-end">
             <AnimatePresence>
@@ -278,10 +268,8 @@ export default function App() {
             </AnimatePresence>
           </div>
         </div>
-
       </main>
 
-      {/* Controls */}
       <footer className="absolute bottom-0 left-0 w-full flex flex-col items-center justify-center pb-6 md:pb-8 z-20 shrink-0 gap-4">
         <AnimatePresence>
           {showTextInput && (
