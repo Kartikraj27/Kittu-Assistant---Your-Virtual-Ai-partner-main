@@ -8,7 +8,7 @@ export function resetKittuSession() {
   chatSession = null;
 }
 
-export async function getKittuResponse(prompt: string, history: { sender: "user" | "zoya", text: string }[] = []): Promise<string> {
+export async function getKittuResponse(prompt: string, history: { sender: "user" | "kittu", text: string }[] = []): Promise<string> {
   try {
     const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
     
