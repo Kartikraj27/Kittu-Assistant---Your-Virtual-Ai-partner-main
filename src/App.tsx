@@ -26,7 +26,7 @@ declare global {
 export default function App() {
   const [appState, setAppState] = useState<AppState>("idle");
   const [messages, setMessages] = useState<ChatMessage[]>(() => {
-    const saved = localStorage.getItem("zoya_chat_history");
+    const saved = localStorage.getItem("kittu_chat_history");
     if (saved) {
       try {
         return JSON.parse(saved);
@@ -40,7 +40,7 @@ export default function App() {
 
   useEffect(() => {
     messagesRef.current = messages;
-    localStorage.setItem("zoya_chat_history", JSON.stringify(messages));
+    localStorage.setItem("kittu_chat_history", JSON.stringify(messages));
   }, [messages]);
 
   const [isMuted, setIsMuted] = useState(false);
@@ -90,11 +90,11 @@ export default function App() {
 
     if (commandResult.isBrowserAction) {
       responseText = commandResult.action;
-      setMessages((prev) => [...prev, { id: Date.now().toString() + "-z", sender: "zoya", text: responseText }]);
+      setMessages((prev) => [...prev, { id: Date.now().toString() + "-z", sender: "kittu", text: responseText }]);
       
       if (!isMuted) {
         setAppState("speaking");
-        const audioBase64 = await getZoyaAudio(responseText);
+        const audioBase64 = await getKittuAudio(responseText);
         if (audioBase64) {
           await playPCM(audioBase64);
         }
@@ -110,7 +110,7 @@ export default function App() {
     } else {
       // 2. General Chit-Chat via Gemini
       responseText = await getKittuResponse(finalTranscript, messagesRef.current);
-      setMessages((prev) => [...prev, { id: Date.now().toString() + "-z", sender: "zoya", text: responseText }]);
+      setMessages((prev) => [...prev, { id: Date.now().toString() + "-z", sender: "kittu", text: responseText }]);
       
       if (!isMuted) {
         setAppState("speaking");
@@ -200,9 +200,9 @@ export default function App() {
       <header className="absolute top-0 left-0 w-full flex justify-between items-center z-20 shrink-0 px-6 py-4 md:px-12 md:py-6">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-violet-500 to-pink-500 flex items-center justify-center font-bold text-sm">
-            Z
+            K
           </div>
-          <h1 className="text-xl font-serif font-medium tracking-wide opacity-90">Zoya</h1>
+          <h1 className="text-xl font-serif font-medium tracking-wide opacity-90">Kittu</h1>
         </div>
         <div className="flex items-center gap-2">
           {messages.length > 0 && (
@@ -296,7 +296,7 @@ export default function App() {
                 type="text"
                 value={textInput}
                 onChange={(e) => setTextInput(e.target.value)}
-                placeholder="Type a message to Zoya..."
+                placeholder="Type a message to Kittu..."
                 className="flex-1 bg-transparent border-none outline-none text-white placeholder:text-white/30 text-sm"
                 autoFocus
               />
