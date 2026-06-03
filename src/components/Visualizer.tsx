@@ -44,13 +44,12 @@ export default function Visualizer({ state }: VisualizerProps) {
     };
   };
 
-  // JARVIS color palette (Cyan/Blue) with Kittu's personality (Violet/Pink hints)
   const getTheme = () => {
     switch (state) {
       case "listening": return { color: "rgba(139, 92, 246, 1)", glow: "shadow-violet-500/60", border: "border-violet-400" };
       case "processing": return { color: "rgba(56, 189, 248, 1)", glow: "shadow-sky-400/80", border: "border-sky-400" };
       case "speaking": return { color: "rgba(236, 72, 153, 1)", glow: "shadow-pink-500/80", border: "border-pink-400" };
-      default: return { color: "rgba(6, 182, 212, 0.8)", glow: "shadow-cyan-500/40", border: "border-cyan-500/50" }; // Cyan for idle
+      default: return { color: "rgba(6, 182, 212, 0.8)", glow: "shadow-cyan-500/40", border: "border-cyan-500/50" };
     }
   };
 
@@ -77,7 +76,7 @@ export default function Visualizer({ state }: VisualizerProps) {
         className={`absolute w-[85%] h-[85%] rounded-full border-[2px] border-dotted ${theme.border} opacity-30`}
       />
 
-      {/* Ring 3: Scanner Ring (Solid with gaps) */}
+      {/* Ring 3: Scanner Ring */}
       <motion.div
         animate={getRingAnimation(2, false)}
         className={`absolute w-[70%] h-[70%] rounded-full border-[1px] ${theme.border} border-t-transparent border-b-transparent opacity-40`}
@@ -101,9 +100,9 @@ export default function Visualizer({ state }: VisualizerProps) {
         className={`absolute w-[25%] h-[25%] rounded-full border-[1px] ${theme.border} bg-black/40 backdrop-blur-md flex items-center justify-center shadow-[inset_0_0_30px_rgba(0,0,0,0.5)]`}
         style={{ boxShadow: `0 0 40px ${theme.color}, inset 0 0 30px ${theme.color}` }}
       >
-        {/* Center Text */}
+        {/* Center Text replaced with KITTU */}
         <div 
-          className="font-bold tracking-[0.3em] text-xl md:text-3xl lg:text-4xl text-white"
+          className="font-bold tracking-[0.3em] text-xl md:text-3xl lg:text-4xl text-white font-mono"
           style={{ textShadow: `0 0 15px ${theme.color}, 0 0 30px ${theme.color}` }}
         >
           KITTU
