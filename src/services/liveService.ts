@@ -18,7 +18,7 @@ export class LiveSessionManager {
   public isMuted: boolean = false;
   
   public onStateChange: (state: "idle" | "listening" | "processing" | "speaking") => void = () => {};
-  public onMessage: (sender: "user" | "zoya", text: string) => void = () => {};
+  public onMessage: (sender: "user" | "kittu", text: string) => void = () => {};
   public onCommand: (url: string) => void = () => {};
 
   constructor() {
@@ -133,7 +133,7 @@ export class LiveSessionManager {
             const userText = message.serverContent?.modelTurn?.parts?.[0]?.text;
             if (userText) {
                // Output transcription
-               this.onMessage("zoya", userText);
+               this.onMessage("kittu", userText);
             }
 
             // Handle Function Calls
