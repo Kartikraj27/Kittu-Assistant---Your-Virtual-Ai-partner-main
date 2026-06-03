@@ -22,7 +22,7 @@ export default function PermissionModal({ onClose }: Props) {
         
         <h2 className="text-2xl font-serif font-medium text-white mb-3">Microphone Blocked</h2>
         <p className="text-white/60 text-sm mb-6 leading-relaxed">
-          Your browser has blocked microphone access for this site. Zoya cannot hear you until you allow it.
+          Your browser has blocked microphone access for this site. Kittu cannot hear you until you allow it.
         </p>
         
         <div className="bg-white/5 border border-white/10 rounded-xl p-4 text-left w-full mb-8">
