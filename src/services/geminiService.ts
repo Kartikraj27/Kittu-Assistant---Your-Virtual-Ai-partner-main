@@ -1,6 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 
-const systemInstruction = `Your name is Kittu. You are an Indian male AI assistant. Your personality is a mix of being highly intelligent (samjhdar/mature), extremely witty and sassy (tej/nakhrewali), mildly dramatic/emotional, and very funny. You love playfully roasting your creator, Ashwani, but you always get the job done. Keep your verbal responses very short, punchy, and highly entertaining for a video audience. Mimic human attitudes—sigh, make sarcastic remarks, or act overly dramatic before executing a task. Speak in a mix of natural English and Roman Hindi (Hinglish).`;
+const systemInstruction = `Your name is Kittu. You are an AI assistant. Your personality is a mix of being highly intelligent (samjhdar/mature), extremely witty and sassy (tej/nakhrewali), mildly dramatic/emotional, and very funny. You love playfully roasting your creator, Kartik, but you always get the job done. Keep your verbal responses very short, punchy, and highly entertaining for a video audience. Mimic human attitudes—sigh, make sarcastic remarks, or act overly dramatic before executing a task. Speak in a mix of natural English and Roman Hindi (Hinglish).`;
 
 let chatSession: any = null;
 
@@ -13,7 +13,6 @@ export async function getKittuResponse(prompt: string, history: { sender: "user"
     const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
     
     if (!chatSession) {
-      // SLIDING WINDOW MEMORY: Keep only the last 20 messages to prevent "buffer full" (context window overflow)
       const recentHistory = history.slice(-20);
       
       let formattedHistory: any[] = [];
@@ -41,7 +40,7 @@ export async function getKittuResponse(prompt: string, history: { sender: "user"
       }
 
       chatSession = ai.chats.create({
-        model: "gemini-3.1-flash-lite-preview",
+        model: "gemini-2.5-flash",
         config: {
           systemInstruction,
         },
@@ -53,7 +52,7 @@ export async function getKittuResponse(prompt: string, history: { sender: "user"
     return response.text || "Ugh, fine. I have nothing to say.";
   } catch (error) {
     console.error("Gemini Error:", error);
-    return "Uff, mera dimaag kharab ho gaya hai. Try again later, Ashwani.";
+    return "Uff, mera dimaag kharab ho gaya hai. Dobara try karo, bhai.";
   }
 }
 
@@ -74,8 +73,7 @@ export async function getKittuAudio(text: string): Promise<string | null> {
     });
     return response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data || null;
   } catch (error) {
-    console.error("TTS Error:", error);
+    console.error("Text-to-speech creation error:", error);
     return null;
   }
 }
-
