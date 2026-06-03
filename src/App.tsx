@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Mic, MicOff, Loader2, Volume2, VolumeX, Keyboard, Send, Trash2 } from "lucide-react";
-import { getZoyaResponse, getZoyaAudio, resetZoyaSession } from "./services/geminiService";
+import { getKittuResponse, getKittuAudio, resetKittuSession } from "./services/geminiService";
 import { processCommand } from "./services/commandService";
 import { LiveSessionManager } from "./services/liveService";
 import Visualizer from "./components/Visualizer";
@@ -12,7 +12,7 @@ type AppState = "idle" | "listening" | "processing" | "speaking";
 
 interface ChatMessage {
   id: string;
-  sender: "user" | "zoya";
+  sender: "user" | "Kiitu";
   text: string;
 }
 
@@ -109,12 +109,12 @@ export default function App() {
       }, 1500);
     } else {
       // 2. General Chit-Chat via Gemini
-      responseText = await getZoyaResponse(finalTranscript, messagesRef.current);
+      responseText = await getKittuResponse(finalTranscript, messagesRef.current);
       setMessages((prev) => [...prev, { id: Date.now().toString() + "-z", sender: "zoya", text: responseText }]);
       
       if (!isMuted) {
         setAppState("speaking");
-        const audioBase64 = await getZoyaAudio(responseText);
+        const audioBase64 = await getKittuAudio(responseText);
         if (audioBase64) {
           await playPCM(audioBase64);
         }
@@ -139,11 +139,11 @@ export default function App() {
         liveSessionRef.current = null;
       }
       setAppState("idle");
-      resetZoyaSession();
+      resetKittuSession();
     } else {
       try {
         setIsSessionActive(true);
-        resetZoyaSession();
+        resetKittuSession();
         
         const session = new LiveSessionManager();
         session.isMuted = isMuted;
@@ -210,7 +210,7 @@ export default function App() {
               onClick={() => {
                 if (confirm("Are you sure you want to clear the chat history?")) {
                   setMessages([]);
-                  resetZoyaSession();
+                  resetKittuSession();
                 }
               }}
               className="p-2 rounded-full bg-white/5 hover:bg-red-500/20 hover:text-red-400 transition-colors border border-white/10"
